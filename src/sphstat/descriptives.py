@@ -307,9 +307,16 @@ def pointsonanellipse(h1: np.ndarray, h2: np.ndarray, h3: np.ndarray, ellipsecoe
     t2 = w[1]
 
     # Step 2
-    g1 = np.sqrt(D/t1)
-    g2 = np.sqrt(D/t2)
+    if t1 == 0:
+        g1 = 0
+    else:
+        g1 = np.sqrt(D / t1)
 
+    if t2 == 0:
+        g2 = 0
+    else:
+        g2 = np.sqrt(D / t2)
+        
     # Step 3
     psis = np.linspace(0, 2 * np.pi, psinum)
     v1 = g1 * np.cos(psis)
