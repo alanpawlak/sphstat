@@ -237,7 +237,7 @@ def meanifsymmetric(samplecart: dict, alpha: float = 0.05) -> tuple:
         dsum += np.sum(xyzhat * np.array(pt))**2
     d = 1 - dsum / n
     sigmahat = np.sqrt(d / (n * Rbar**2))  # Spherical standard error
-    q = np.arcsin(np.sqrt(-np.log(alpha)) * sigmahat)
+    q = np.arcsin(np.clip(np.sqrt(-np.log(alpha)) * sigmahat, -1.0, 1.0))
     return mdir, sigmahat, q
 
 
@@ -770,8 +770,8 @@ def kentmeanccone(samplecart: dict, alpha: float = 0.05) -> tuple:
     g = -2 * np.log(alpha)/(n * mubar**2)
     s1 = np.sqrt(sigma2_1bar * g)
     s2 = np.sqrt(sigma2_2bar * g)
-    ths1 = np.arcsin(s1)
-    ths2 = np.arcsin(s2)
+    ths1 = np.arcsin(np.clip(s1, -1.0, 1.0))
+    ths2 = np.arcsin(np.clip(s2, -1.0, 1.0))
 
     # Step 3 for sample mean CI
     u0 = np.linspace(-s1, s1, 360)

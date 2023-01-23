@@ -236,7 +236,7 @@ def fisher(numsamp: int, alpha: float, beta: float, kappa: float) -> dict:
     r1 = rng.uniform(0, 1, numsamp)
     r2 = rng.uniform(0, 1, numsamp)
     lamb = np.exp(-2 * kappa)
-    the = 2 * np.arcsin(np.sqrt(-np.log(r1 * (1 - lamb) + lamb) / (2 * kappa))) - np.pi
+    the = 2 * np.arcsin(np.clip(np.sqrt(-np.log(r1 * (1 - lamb) + lamb) / (2 * kappa)),-1.0, 1.0)) - np.pi
     phi = 2 * np.pi * r2
     samplerad_fisher = dict()
     samplerad_fisher['tetas'] = list(the - np.pi)

@@ -177,7 +177,7 @@ def pooledmedian(samplecartlist: list, similarflag: bool = False) -> tuple:
             V += samplecartlist[ind]['n'] * Wi
 
         pooledmedipre = np.linalg.inv(V) @ Wtot
-        th = np.arcsin(np.sqrt(pooledmedipre[0] ** 2 + pooledmedipre[1] ** 2))
+        th = np.arcsin(np.clip(np.sqrt(pooledmedipre[0] ** 2 + pooledmedipre[1] ** 2), -1.0, 1.0))
         ph = np.arctan2(pooledmedipre[1], pooledmedipre[0])
         pooledmedi = (th[0], ph[0])
         # Still need the confidence cone: (7.7) on p203 and onwards
@@ -312,7 +312,7 @@ def pooledmean(samplecartlist: list, alpha: float = 0.05) -> tuple:
         Vwhat = 1 / np.sum(nsa * Rbara / dia)
 
     sigmaw = np.sqrt(2 * Vwhat)
-    qw = np.arcsin(np.sqrt(-np.log(alpha) * sigmaw ** 2 * rhowhat ** 2 / Rwbar ** 2))
+    qw = np.arcsin(np.clip(np.sqrt(-np.log(alpha) * sigmaw ** 2 * rhowhat ** 2 / Rwbar ** 2), -1.0, 1.0))
 
     return mdirpooled, sigmaw, qw
 
@@ -772,16 +772,16 @@ def fishercommonmean(samplecartlist: list, alpha: float = 0.05) -> tuple:
             xhat += np.sum(Rbara * xhati * wia)
         xhat /= np.linalg.norm(xhat)
         alphahat, betahat = cart2sph(xhat)
-        qw = np.arcsin(
-            sqrt(-np.log(alpha) * np.sum(2 * nia * Rbara / (kappaa * N ** 2 * np.linalg.norm(xhat) ** 2))))
+        qw = np.arcsin(np.clip(
+            sqrt(-np.log(alpha) * np.sum(2 * nia * Rbara / (kappaa * N ** 2 * np.linalg.norm(xhat) ** 2))), -1.0, 1.0))
     else:
         wia = nia * kappaa / np.sum(nia * kappaa)
         for xhati in xhatilist:
             xhat += np.sum(Rbara * xhati * wia)
         xhat /= np.linalg.norm(xhat)
         alphahat, betahat = cart2sph(xhat)
-        qw = np.arcsin(sqrt(-np.log(alpha) * np.sum(
-            2 * nia * Rbara * kappaa / (np.sum(nia * kappaa) ** 2 * np.linalg.norm(xhat) ** 2))))
+        qw = np.arcsin(np.clip(sqrt(-np.log(alpha) * np.sum(
+            2 * nia * Rbara * kappaa / (np.sum(nia * kappaa) ** 2 * np.linalg.norm(xhat) ** 2))), -1.0, 1.0))
     mdir = (alphahat, betahat)
     return mdir, qw
 
