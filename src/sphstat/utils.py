@@ -398,8 +398,18 @@ def maptofundamental(dirct: tuple) -> tuple:
     :return: Remapped angles th and ph
     :rtype: tuple
     """
-    th = np.mod(dirct[0], np.pi)
-    ph = np.mod(dirct[1], 2 * np.pi)
+    # Correctly handle the edge case for the inclination angle at π
+    if dirct[0] == np.pi:
+        th = np.pi
+    else:
+        th = np.mod(dirct[0], np.pi)
+
+    # Correctly handle the edge case for the azimuth angle at 2π
+    if dirct[1] == 2 * np.pi:
+        ph = 2 * np.pi
+    else:
+        ph = np.mod(dirct[1], 2 * np.pi)
+
     return th, ph
 
 
